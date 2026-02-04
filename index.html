@@ -1,0 +1,146 @@
+html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0; padding: 0; width: 100vw; height: 100vh;
+            background: transparent !important; overflow: hidden;
+            position: fixed; pointer-events: none; font-family: sans-serif;
+        }
+
+        #clt-icon {
+            width: 60px; height: 60px; background: #000; border: 2.5px solid #ff0000;
+            border-radius: 50%; position: fixed; top: 150px; left: 15px;
+            z-index: 2147483647; display: flex; align-items: center; justify-content: center;
+            color: #ff0000; font-weight: 900; box-shadow: 0 0 15px #ff0000;
+            pointer-events: auto; cursor: pointer; touch-action: none;
+        }
+
+        #clt-panel {
+            width: 250px; background: #0a0a0a; border: 1.5px solid #ff0000;
+            border-radius: 12px; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 2147483647;
+            display: none; box-shadow: 0 0 40px #000; pointer-events: auto;
+        }
+
+        .bar { height: 35px; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; border-bottom: 1px solid #222; cursor: move; touch-action: none; }
+        .menu-title { color: #ff0000; font-size: 11px; font-weight: bold; }
+        .controls { display: flex; gap: 15px; color: #fff; font-size: 20px; font-weight: bold; }
+
+        .content { padding: 15px; text-align: center; }
+        
+        input {
+            width: 90%; background: #111; border: 1px solid #333; color: #fff;
+            padding: 8px; border-radius: 5px; margin-bottom: 10px; font-size: 12px;
+            outline: none; text-align: center;
+        }
+
+        select {
+            width: 98%; background: #111; border: 1px solid #333; color: #fff;
+            padding: 8px; border-radius: 5px; margin-bottom: 15px; outline: none;
+        }
+
+        .apply-btn {
+            width: 100%; background: #ff0000; color: #000; border: none;
+            padding: 10px; font-weight: 900; border-radius: 6px; cursor: pointer;
+        }
+
+        #resultado {
+            margin-top: 15px; padding: 10px; background: #111;
+            border: 1px dashed #ff0000; border-radius: 5px;
+            display: none; font-size: 11px; color: #fff; text-align: left;
+        }
+
+        .val { color: #00ff00; font-weight: bold; float: right; }
+    </style>
+</head>
+<body onload="abrirFF()">
+
+<div id="clt-icon">PEDRO</div>
+
+<div id="clt-panel">
+    <div id="drag" class="bar">
+        <div class="menu-title">PEDROPAINEIS | GENERATOR</div>
+        <div class="controls">
+            <div onclick="min()" style="cursor:pointer">_</div>
+            <div onclick="off()" style="cursor:pointer">×</div>
+        </div>
+    </div>
+    <div class="content">
+        <input type="text" id="modelo" placeholder="Ex: Galaxy A07">
+        
+        <select id="tipo">
+            <option value="alta">SENSIBILIDADE ALTA</option>
+            <option value="baixa">SENSIBILIDADE BAIXA</option>
+        </select>
+
+        <button class="apply-btn" onclick="gerarSensi()">GERAR SENSIBILIDADE</button>
+
+        <div id="resultado">
+            GERAL: <span class="val" id="res_geral">0</span><br>
+            PONTO VERMELHO: <span class="val" id="res_red">0</span><br>
+            MIRA 2X: <span class="val" id="res_2x">0</span><br>
+            MIRA 4X: <span class="val" id="res_4x">0</span><br>
+            DPI: <span class="val" id="res_dpi">0</span>
+            <hr border="0.1" style="margin: 10px 0; border-color: #222;">
+            <button class="apply-btn" style="height: 25px; padding: 0; font-size: 9px;" onclick="abrirFF()">ABRIR JOGO AGORA</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const icon = document.getElementById('clt-icon');
+    const panel = document.getElementById('clt-panel');
+    const drag = document.getElementById('drag');
+
+    function gerarSensi() {
+        const modelo = document.getElementById('modelo').value;
+        const tipo = document.getElementById('tipo').value;
+        if(modelo == "") { alert("Digite o modelo do celular!"); return; }
+
+        let geral, red, m2x, m4x, dpi;
+        if(tipo === "alta") {
+            geral = Math.floor(Math.random() * 6) + 95;
+            red = Math.floor(Math.random() * 11) + 90;
+            m2x = Math.floor(Math.random() * 16) + 85;
+            m4x = Math.floor(Math.random() * 21) + 80;
+            dpi = Math.floor(Math.random() * 301) + 600;
+        } else {
+            geral = Math.floor(Math.random() * 10) + 85;
+            red = Math.floor(Math.random() * 20) + 70;
+            m2x = Math.floor(Math.random() * 25) + 60;
+            m4x = Math.floor(Math.random() * 25) + 55;
+            dpi = Math.floor(Math.random() * 90) + 411;
+        }
+
+        document.getElementById('res_geral').innerText = geral;
+        document.getElementById('res_red').innerText = red;
+        document.getElementById('res_2x').innerText = m2x;
+        document.getElementById('res_4x').innerText = m4x;
+        document.getElementById('res_dpi').innerText = dpi;
+        document.getElementById('resultado').style.display = 'block';
+    }
+
+    function abrirFF() { window.location.href = "intent://#Intent;package=com.dts.freefireth;scheme=android-app;end"; }
+    icon.onclick = () => { panel.style.display = 'block'; icon.style.display = 'none'; };
+    function min() { panel.style.display = 'none'; icon.style.display = 'flex'; }
+    function off() { if(confirm("Sair?")) { panel.style.display='none'; icon.style.display='none'; } }
+
+    icon.addEventListener('touchmove', (e) => {
+        let t = e.touches[0];
+        icon.style.left = (t.pageX - 30) + 'px';
+        icon.style.top = (t.pageY - 30) + 'px';
+    });
+
+    drag.addEventListener('touchmove', (e) => {
+        let t = e.touches[0];
+        panel.style.transform = 'none';
+        panel.style.left = (t.pageX - 125) + 'px';
+        panel.style.top = (t.pageY - 17) + 'px';
+    });
+</script>
+</body>
+</html>
